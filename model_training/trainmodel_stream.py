@@ -7,7 +7,8 @@ import re
 lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
 
 PATH = "/home/anne/tmpanne/"
-
+outlets = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)']
+#outlets = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)', 'metro (print)', 'telegraaf (www)', 'nrc (www)', 'volkskrant (www)', 'ad (www)', 'trouw (www)', 'nu' , 'nos' , 'metro (www)', 'nieuwsblad (www)', 'tubantia (www)']
 
 w2v_params = {
     'alpha': 0.025,
@@ -104,4 +105,4 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
     logging.root.setLevel(level=logging.INFO)
 
-    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = ["telegraaf (print)" , "ad (print)"])
+    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = outlets))
