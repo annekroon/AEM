@@ -6,14 +6,25 @@ import re
 
 lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
 
-PATH = "/home/anne/tmpanne/peryear/"
+PATH = "/home/anne/tmpanne/"
 
+
+w2v_params = {
+    'alpha': 0.025,
+    'size': 100,
+    'window': 15,
+    'iter': 5,
+    'min_count': 5,
+    'sample': t,
+    'sg': 1,
+    'hs': 0,
+    'negative': 5
+}
 
 def preprocess(s):
     s = s.lower().replace('!','.').replace('?','.')  # replace ! and ? by . for splitting sentences
     s = lettersanddotsonly.sub(' ',s)
     return s
-
 
 class train_model():
 
@@ -26,7 +37,7 @@ class train_model():
                   "query": {
                           "bool": {
                                     "filter": [
-                                                { "match": { "doctype.keyword": self.doctype}},
+                                                { "match": { "doctype": self.doctype}},
                                                 { "range": { "publication_date": { "gte": self.fromdate, "lt":self.todate }}}
                                               ]
                                   }
@@ -36,7 +47,7 @@ class train_model():
             self.query = {
                   "query": {
                           "bool": {
-                                    "filter": [ {'bool': {'should': [{ "match": { "doctype.keyword": d}} for d in self.doctype]}},
+                                    "filter": [ {'bool': {'should': [{ "match": { "doctype": d}} for d in self.doctype]}},
                                                 { "range": { "publication_date": { "gte": self.fromdate, "lt":self.todate }}}
                                               ]
                                   }
@@ -46,7 +57,7 @@ class train_model():
 
         self.documents = 0
         self.failed_document_reads = 0
-        self.model = gensim.models.Word2Vec(iter = 1, min_count=10)
+        self.model = gensim.models.Word2Vec(w2v_params)
         self.model.build_vocab(self.get_sentences_vocab())
         print('Build Word2Vec vocabulary')
         self.model.train(self.get_sentences_train(),total_examples=self.model.corpus_count, epochs=self.model.iter)
@@ -76,10 +87,6 @@ class train_model():
             except:
                 continue
 
-
-
-
-
 def train_and_save(fromdate,todate,doctype):
     filename = "{}word2vec_{}_{}_{}".format(PATH,doctype,fromdate,todate)
 
@@ -97,30 +104,4 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
     logging.root.setLevel(level=logging.INFO)
 
-    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "telegraaf (print)")
-    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "volkskrant (print)")
-    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "nrc (print)")
-    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "ad (print)")
-    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "trouw (print)")
-
-    #train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2000-01-01", todate = "2000-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2001-01-01", todate = "2001-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2002-01-01", todate = "2002-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2003-01-01", todate = "2003-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2004-01-01", todate = "2004-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2005-01-01", todate = "2005-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2006-01-01", todate = "2006-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2007-01-01", todate = "2007-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2008-01-01", todate = "2008-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2009-01-01", todate = "2009-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2010-01-01", todate = "2010-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2011-01-01", todate = "2011-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2012-01-01", todate = "2012-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2013-01-01", todate = "2013-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2014-01-01", todate = "2014-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2015-01-01", todate = "2015-12-31", doctype = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)'])
-    #train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "nrc (print)")
-    #train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "ad (print)")
-    #train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "volkskrant (print)")
-    #train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = "trouw (print)")
+    train_and_save(fromdate = "2000-01-01", todate = "2015-12-31", doctype = ["telegraaf (print)" , "ad (print)"])
