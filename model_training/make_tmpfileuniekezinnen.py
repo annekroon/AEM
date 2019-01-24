@@ -58,14 +58,14 @@ class train_model():
         self.documents = 0
         self.failed_document_reads = 0
         self.model = gensim.models.Word2Vec(**w2v_params)
-        self.model.build_vocab(self.get_sentences_vocab())
-        print('Build Word2Vec vocabulary')
-        self.model.train(self.get_sentences_train(),total_examples=self.model.corpus_count, epochs=self.model.iter)
-        print('Estimated Word2Vec model')
+
+        self.sentences = set()
+        for sentence in self.get_sentences():
+            self.sentences.add(" ".join(sentence))
 
 
 
-    def get_sentences_vocab(self):
+    def get_sentences(self):
         for d in inca.core.database.scroll_query(self.query):
             try:
                 self.documents += 1
@@ -76,25 +76,17 @@ class train_model():
                 self.failed_document_reads +=1
                 continue
 
-    def get_sentences_train(self):
-        for d in inca.core.database.scroll_query(self.query):
-            try:
-                sentences_as_lists = (s.split() for s in preprocess(d['_source']['text']).split('.'))
-                for sentence in sentences_as_lists:
-                    yield sentence
-            except:
-                continue
-
 def train_and_save(fromdate,todate,doctype):
-    filename = "{}w2v_all_{}_{}".format(PATH,fromdate,todate)
+    filename = "{}uniekezinnen_{}_{}".format(PATH,fromdate,todate)
 
     casus = train_model(doctype,fromdate,todate)
 
-    with open(filename, mode='wb') as fo:
-        casus.model.save(fo)
-    print('Saved model')
-    print("reopen it with m = gensim.models.FastText.load('{}')".format(filename))
-    del(casus)
+    with open(filename, mode='w') as fo:
+        for sentence in casus.sentences:
+            fo.write(sentence)
+            fo.write('\n')
+    
+    print('Created file with sentences: {}'.format(filename))
 
 
 if __name__ == "__main__":
