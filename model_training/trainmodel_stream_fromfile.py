@@ -10,14 +10,9 @@ PATH = "/home/anne/tmpanne/"
 FILENAME = "uniekezinnen_2000-01-01_2016-12-31"
 outlets = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)',  'telegraaf (www)', 'nrc (www)', 'volkskrant (www)', 'ad (www)', 'trouw (www)', 'nu' , 'nos']
 
-w2v_params = {
-    'alpha': 0.025,
-    'size': 100,
-   # 'window': 15,
-   # 'iter': 5,
-    'min_count': 5,
-    'sg': 1,
-    'hs': 0,
+w2v_params = {'size': 300,
+    'window': 5,
+    'sg': 0,
     'negative': 5
 }
 
@@ -59,14 +54,14 @@ class train_model():
 
 
 def train_and_save(fromdate,todate,doctype):
-    filename = "{}w2v_all__uniquesentences_{}_{}".format(PATH,fromdate,todate)
+    filename = "{}w2v_all_uniquesentences_pp{}_{}".format(PATH,fromdate,todate)
 
     casus = train_model(doctype,fromdate,todate)
 
     with open(filename, mode='wb') as fo:
         casus.model.save(fo)
     print('Saved model')
-    print("reopen it with m = gensim.models.FastText.load('{}')".format(filename))
+    print("reopen it with m = gensim.models.Word2Vec.load('{}')".format(filename))
     del(casus)
 
 

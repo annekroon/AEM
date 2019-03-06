@@ -8,7 +8,7 @@ lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
 
 PATH = "/home/anne/tmpanne/"
 #outlets = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)']
-outlets = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)',  'telegraaf (www)', 'nrc (www)', 'volkskrant (www)', 'ad (www)', 'trouw (www)', 'nu' , 'nos']
+outlets = ['telegraaf (print)', 'nrc (print)', 'volkskrant (print)', 'ad (print)', 'trouw (print)',  'telegraaf (www)', 'nrc (www)', 'volkskrant (www)', 'ad (www)', 'trouw (www)', 'nu' , 'nos', 'hetlaatstenieuws', 'hetlaatstenieuws (www)','parool (www)', 'tubantia (www)', 'zwartewaterkrant (www)', 'fd (print)']
 
 w2v_params = {
     'alpha': 0.025,

@@ -62,7 +62,7 @@ class train_model():
                 continue
 
 def train_and_save(fromdate,todate,doctype):
-    filename = "{}uniekezinnen_testshort_{}_{}".format(PATH,fromdate,todate)
+    filename = "{}uniekezinnen_{}_{}".format(PATH,fromdate,todate)
 
     casus = train_model(doctype,fromdate,todate)
 
@@ -82,4 +82,4 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
     logging.root.setLevel(level=logging.INFO)
 
-    train_and_save(fromdate = "2017-12-25", todate = "2017-12-31", doctype = outlets)
+    train_and_save(fromdate = "2015-01-01", todate = "2017-12-31", doctype = outlets)

@@ -3,18 +3,14 @@ import logging
 import re
 
 lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
-PATH = "/Users/anne/repos/embedding_models/"
-FILENAME = "uniekezinnen_testshort_2016-10-01_2016-12-31"
+PATH = "/home/anne/tmpanne/"
+FILENAME = "uniekezinnen_2000-01-01_2016-12-31"
 
 w2v_params = {
-    'alpha': 0.025,
-    'size': 100,
-   # 'window': 15,
-    'iter': 5,
-    'min_count': 5,
+    'size': 320,
+    'window': 11,
     'sg': 1,
-    'hs': 0,
-    'negative': 5
+    'negative': 15
 }
 
 def preprocess(s):
@@ -37,14 +33,14 @@ class train_model():
         print('Estimated Word2Vec model')
         
 def train_and_save(fromdate,todate):
-    filename = "{}w2v_all__uniquesentences_{}_{}".format(PATH,fromdate,todate)
+    filename = "{}w2v_320d{}_{}".format(PATH,fromdate,todate)
 
     casus = train_model(fromdate,todate)
 
     with open(filename, mode='wb') as fo:
         casus.model.save(fo)
     print('Saved model')
-    print("reopen it with m = gensim.models.FastText.load('{}')".format(filename))
+    print("reopen it with m = gensim.models.word2vec.load('{}')".format(filename))
     del(casus)
 
 if __name__ == "__main__":
