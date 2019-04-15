@@ -15,11 +15,9 @@ for file in os.listdir(path_to_jsonfiles):
         
 alldicts = [dict(v, id=k) for x in alldicts for k, v in x.items()]
 
-df = pd.DataFrame(alldicts)
-df = df.transpose()
+df = pd.DataFrame(alldicts).transpose()
 df.columns = df.loc['id']
-df = df.drop('id')
-df_succes = df['succes']
+df_succes = df['succes'].drop('id')
 n_per_np = df_succes.sum(axis = 1, skipna = True) 
 total_n = n_per_np.sum(axis = 0)
 
