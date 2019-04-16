@@ -4,27 +4,31 @@ import re
 import itertools
 
 lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
-PATH = "/home/anne/tmpanne/"
+PATH = "/home/anne/tmpanne/fullsample/"
 FILENAME = "AEM_corpus"
 
 NR_MODEL = 0
 
-
-def get_parameters():
-    windows = [5, 10, 47615]
+def get_parameters(model_number):
+    nr = int(model_number)
+    
+    window = [5, 10, 47615]
     negative = [5, 15]
     size = [100, 300]
 
     w2v_parameters = []
 
-    for w, n, s in list(itertools.product(windows, negative, size)):
+    for w, n, s in list(itertools.product(window, negative, size)):
         my_dict = {} 
-        my_dict['windows'] = w
+        my_dict['window'] = w
         my_dict['negative'] = n
         my_dict['size'] = s
         w2v_parameters.append(my_dict)
     
-    return w2v_parameters
+    return w2v_parameters[nr]
+
+parameters = get_parameters(NR_MODEL)
+print("set parameters:", parameters)
 
 def preprocess(s):
     s = s.lower().replace('!','.').replace('?','.')  # replace ! and ? by . for splitting sentences
@@ -37,15 +41,17 @@ class train_model():
         self.fromdate = fromdate
         self.todate = todate
         self.sentences = gensim.models.word2vec.PathLineSentences(PATH + FILENAME)
-        self.w2v_params = get_parameters() 
-        self.model = gensim.models.Word2Vec(**w2v_params[NR_MODEL)
+        self.w2v_params = get_parameters(NR_MODEL)
+        print("estimating model with the following parameter settings: {}".format(self.w2v_params))
+
+        self.model = gensim.models.Word2Vec(**self.w2v_params)
         self.model.build_vocab(self.sentences)
-        print('Build Word2Vec vocabulary')
+        print('Build Word2Vec vocabulary for Model {}'.format(NR_MODEL))
         self.model.train(self.sentences,total_examples=self.model.corpus_count, epochs=self.model.iter)
         print('Estimated Word2Vec model')
         
 def train_and_save(fromdate,todate):
-    filename = "{}w2v_model_nr_{}_window_{}_size_{}_negsample_{}".format(PATH, NR_MODEL, w2v_params[NR_MODEL]['windows'],w2v_params[NR_MODEL]['size'], w2v_params[NR_MODEL]['negative'] )
+    filename = "{}w2v_model_nr_{}_window_{}_size_{}_negsample_{}".format(PATH, NR_MODEL, parameters['window'], parameters['size'],parameters['negative'] )
 
     casus = train_model(fromdate,todate)
 
