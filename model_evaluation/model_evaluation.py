@@ -39,15 +39,9 @@ df = pd.read_pickle(path_to_data + "data_geannoteerd.pkl")
 data = df['text']
 labels = df['topic']
 
-basepath = '/home/anne/tmpanne/fullsample/test_'
+basepath = '/home/anne/tmpanne/fullsample/'
 
 X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.02, random_state=42)
-
-
-basepath = '/Users/anne/repos/embedding_models/test/'
-
-X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.02, random_state=42)
-
 
 class word2vec_analyzer():
     '''This class tests the efficacy of Word2Vec models in downstream tasks.'''
@@ -55,6 +49,7 @@ class word2vec_analyzer():
     def __init__(self):
         self.nmodel = 0
         self.vectorizer = 'Tfidf'
+        self.param_grid = {'clf__penalty': ('l2', 'elasticnet') }
         
        # logger.info("Created analyzer with {} combinations for crime and {} combinations for low life".format(
        #     len(self.combinations_crime), len(self.combinations_low)))
@@ -78,73 +73,120 @@ class word2vec_analyzer():
         
     def get_best_parameters(self):
         
+        results = []
+        
         if self.vectorizer == 'Tfidf':
             pipeline = Pipeline([
-                ('vect', CountVectorizer()),
-                ('tfidf', TfidfTransformer()),
-                ('clf', SGDClassifier(loss='hinge', tol=1e-4)),
+                ('tfidf', TfidfVectorizer()),
+                ('clf', SGDClassifier(loss='hinge', tol=1e-4, alpha=1e-6, max_iter=1000, random_state=42)),
             ])
             
         else:
             pipeline = Pipeline([
                 ('vect', CountVectorizer()),
-                ('clf', SGDClassifier(loss='hinge', tol=1e-4)),
+                ('clf', SGDClassifier(loss='hinge', tol=1e-4, alpha=1e-6, max_iter=1000, random_state=42)),
             ])
             
-        param_grid =  {'clf__max_iter': (20, 30) , 'clf__alpha': (0.00001, 0.000001), 'clf__penalty': ('l2', 'elasticnet')}
-
+        param_grid = self.param_grid 
         search = GridSearchCV(pipeline, param_grid, iid=False, cv=5)
         logger.info("Start GridSearch ...")
 
         search.fit(X_train, y_train )   
-
+      
         print("Best parameter (CV score=%0.3f):" % search.best_score_)
         print()
         print("Best parameters:", search.best_params_)
+        
 
-        return search.best_params_
-
+        return search.best_params_ 
     
+  
     def apply_bestparameters_w2v(self, X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test):
+        
+        logger.info("retrieved the best parameter settings: {}...  ".format(bp))
+        logger.info("\n\n\nthese are the results of the baseline model with hyperparameter optimalization: {}".format(results_baseline))
+        
         results = []
+        
         bp = self.get_best_parameters()
         
-        for model in self.get_w2v_model():
+        if self.vectorizer == "Tfidf":
             
-            logger.info(">>>> Retrieving best parameter settings for the model {} ...".format(model['filename']))
-            if self.vectorizer == "Tfidf":
-                logger.info("Apply best parameter setting for the model {} ...".format(model['filename']))
+            pipeline = Pipeline([
+                ('tfidf', TfidfVectorizer()),
+                ('clf', SGDClassifier(loss='hinge', alpha=1e-6, tol=1e-4, max_iter=1000, random_state=42, penalty=bp['clf__penalty'])
+                 )])
+            
+        else:
+            pipeline = Pipeline([
+                ('vect', CountVectorizer()),
+                ('clf', SGDClassifier(loss='hinge', alpha=1e-6, tol=1e-4, max_iter=1000, random_state=42, penalty=bp['clf__penalty'])
+                 )])
+            
+        clf = pipeline.fit(X_train, y_train)   
+        logger.info("fitted baseline model.")
 
-                pipeline = Pipeline([("word2vec Tfidf vectorizer", embeddingvectorizer.EmbeddingTfidfVectorizer(model, operator='mean')),
-                                     ("clf", SGDClassifier(loss='hinge', tol=1e-4, penalty=bp['clf__penalty'], alpha=bp['clf__alpha'], max_iter=bp['clf__max_iter']))
+        test_pred = clf.predict(X_test)
+        logger.info("predicted baseline model.")
+            
+        test_pred = search.predict(X_test)
+        accuracy = accuracy_score(y_test, test_pred)
+        precision = precision_score(y_test, test_pred, average = 'macro')
+        recall = recall_score(y_test, test_pred, average = 'macro')
+        f1score = f1_score(y_test, test_pred, average = 'macro')
+        
+        results.append({'accuracy': accuracy, 
+            'precision': precision, 
+            'recall': recall, 
+            'f1score': f1_score, 
+            'classifier' : "SGD",
+            'model' : 'baseline'})
+        
+        
+        for model in self.get_w2v_model():
+            logger.info(">>>> Retrieving best parameter settings for the model {} ...".format(model['filename']))
+
+            
+            if self.vectorizer == "Tfidf":
+                
+                logger.info("Apply best parameter setting for the model {} ...".format(model['filename']))
+                pipeline = Pipeline([
+                    ("word2vec Tfidf vectorizer", embeddingvectorizer.EmbeddingTfidfVectorizer(model['gensimmodel'], operator='mean')),
+                    ("clf", SGDClassifier(loss='hinge', alpha=1e-6, tol=1e-4, max_iter=1000, random_state=42, penalty=bp['clf__penalty']))
                     ])
+                
+                
+                
             else:
                 logger.info("Apply best parameter setting for the model {} ...".format(model['filename']))
                 pipeline = Pipeline([
-                    ("word2vec Count vectorizer", embeddingvectorizer.EmbeddingCountVectorizer(model, operator='mean')),
-                    ("clf", SGDClassifier(loss='hinge', tol=1e-4, penalty=bp['clf__penalty'], alpha=bp['clf__alpha'], max_iter=bp['clf__max_iter']))
-                ])
-
-
+                    ("word2vec Count vectorizer", embeddingvectorizer.EmbeddingCountVectorizer(model['gensimmodel'], operator='mean')),
+                    ("clf", SGDClassifier(loss='hinge', alpha=1e-6, tol=1e-4, max_iter=1000, random_state=42, penalty=bp['clf__penalty']))
+                    ])
+                
+                
             clf = pipeline.fit(X_train, y_train)   
             logger.info("fitted...{} ...".format(model['filename']))
 
-            predicted = clf.predict(X_test)
+            test_pred = clf.predict(X_test)
             logger.info("predicted...{} ...".format(model['filename']))
 
-            precision, recall, fscore, support= score(y_test, predicted, average='macro')
+            accuracy = accuracy_score(y_test, test_pred)
+            precision = precision_score(y_test, test_pred, average = 'macro')
+            recall = recall_score(y_test, test_pred, average = 'macro')
+            f1score = f1_score(y_test, test_pred, average = 'macro')
 
-            results.append({'precision': precision, 
-                    'recall': recall, 
-                    'f1': fscore, 
-                    'classifier' : "SGD", 
-                    'penalty' : bp['clf__penalty'], 
-                    'alpha' : bp['clf__alpha'], 
-                    'max_iter' : bp['clf__max_iter'] , 
-                    'model' : model['filename']})
+            results.append({'accuracy': accuracy, 
+            'precision': precision, 
+            'recall': recall, 
+            'f1score': f1_score, 
+            'classifier' : "SGD",
+            'model' : model['filename']})
 
+            print("these are the results of the w2v models:", accuracy, precision, recall)
+            
         return results
-
+        
 if __name__ == "__main__":
 
     logger = logging.getLogger()
@@ -164,9 +206,10 @@ if __name__ == "__main__":
             fo.write(',\n')
         fo.write('[]]')
 
-    df = pd.DataFrame.from_dict(gensimscore)
+    df = pd.DataFrame.from_dict(my_results)
     print('Created dataframe')
     # print(df)
     df.to_csv('w2v_evaluation.csv')
+
 
             
