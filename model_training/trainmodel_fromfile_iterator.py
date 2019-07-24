@@ -4,7 +4,7 @@ import re
 
 lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
 PATH = "/home/anne/tmpanne/"
-FILENAME = "uniekezinnen_2000-01-01_2016-12-31"
+FILENAME = "AEM_corpus"
 
 w2v_params = {
     'size': 320,
@@ -12,6 +12,24 @@ w2v_params = {
     'sg': 1,
     'negative': 15
 }
+
+
+def get_parameters():
+    windows = [5, 10, 47615]
+    negative = [5, 15]
+    size = [100, 300]
+
+    w2v_parameters = []
+
+    for w, n, s in list(itertools.product(windows, negative, size)):
+        my_dict = {} 
+        my_dict['windows'] = w
+        my_dict['negative'] = n
+        my_dict['size'] = s
+        w2v_parameters.append(my_dict)
+    
+    return w2v_parameters
+
 
 def preprocess(s):
     s = s.lower().replace('!','.').replace('?','.')  # replace ! and ? by . for splitting sentences
