@@ -1,0 +1,3 @@
+,alpha,classifier,f1,max_iter,model,penalty,precision,recall
+0,1e-05,SGD,0.17889908256880735,20,w2v_model_nr_1_window_5_size_300_negsample_5,l2,0.1392857142857143,0.25
+1,1e-05,SGD,0.17889908256880735,20,w2v_model_nr_0_window_5_size_100_negsample_5,l2,0.1392857142857143,0.25
