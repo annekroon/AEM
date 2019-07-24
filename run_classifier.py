@@ -2,11 +2,22 @@ from lib import classification
 import logging
 import argparse
 import json
+import pandas as pd
 
 def main(args):
 	analyzer = classification.word2vec_analyzer(path_to_data = args.data_path, path_to_embeddings = args.word_embedding_path, vectorizer = args.type_vectorizer, sample_size = args.word_embedding_sample_size)
 	my_results = analyzer.get_final()
 	print(my_results)
+
+	flat_list = [item for sublist in my_results[1] for item in sublist]
+	w2v = pd.DataFrame.from_dict(flat_list)
+	baseline = pd.DataFrame.from_dict(my_results[0])
+	df = pd.concat([w2v, baseline])
+	print('Created dataframe')
+	print(df)
+
+	df.to_pickle('{}_training_size_{}_{}.pkl'.format(args.output, args.word_embedding_sample_size, args.data_path.split('/')[-2]))
+
 
 	with open('{}_training_size_{}_{}.json'.format(args.output, args.word_embedding_sample_size, args.data_path.split('/')[-2]),mode='w') as fo:
 		fo.write('[')
@@ -15,6 +26,7 @@ def main(args):
 			fo.write(',\n')
 		fo.write('[]]')
 		print("\n\n\nSave results\n\n\n")
+
 
 if __name__ == '__main__':
 
