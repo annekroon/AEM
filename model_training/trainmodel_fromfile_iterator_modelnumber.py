@@ -4,14 +4,15 @@ import re
 import itertools
 
 lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
-PATH = "/home/anne/tmpanne/fullsample/"
-FILENAME = "AEM_corpus"
+PATH = "/home/anne/tmpanne/"
+FILENAME = "uniekezinnen_2000-01-01_2017-12-31"
+# n sentences uniekezinnen_2000-01-01_2017-12-31: 4289076/4289076
 
 NR_MODEL = 0
 
 def get_parameters(model_number):
     nr = int(model_number)
-    
+
     window = [5, 10, 47615]
     negative = [5, 15]
     size = [100, 300]
@@ -19,12 +20,12 @@ def get_parameters(model_number):
     w2v_parameters = []
 
     for w, n, s in list(itertools.product(window, negative, size)):
-        my_dict = {} 
+        my_dict = {}
         my_dict['window'] = w
         my_dict['negative'] = n
         my_dict['size'] = s
         w2v_parameters.append(my_dict)
-    
+
     return w2v_parameters[nr]
 
 parameters = get_parameters(NR_MODEL)
@@ -49,7 +50,7 @@ class train_model():
         print('Build Word2Vec vocabulary for Model {}'.format(NR_MODEL))
         self.model.train(self.sentences,total_examples=self.model.corpus_count, epochs=self.model.iter)
         print('Estimated Word2Vec model')
-        
+
 def train_and_save(fromdate,todate):
     filename = "{}w2v_model_nr_{}_window_{}_size_{}_negsample_{}".format(PATH, NR_MODEL, parameters['window'], parameters['size'],parameters['negative'] )
 
