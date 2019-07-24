@@ -14,21 +14,20 @@ This repo contains the following elements:
 In doing so, we compare the here-trained models with pre-trained word embedding models on Dutch corpora.
 
 ---
-
 ## Python scripts:
 
 ### run_classifier.py
 
 This script will execute the classification class in `lib/`: It will return accuracy scores for classification with SGD and ExtraTrees with or without embeddings.
 
-To run:
+Usage:
 
 ```
 python3 run_classifier.py  --word_embedding_path ../folder_with_embedding_models/ --word_embedding_sample_size large  --type_vectorizer Tfidf --data_path data/dataset_vermeer.pkl --output output/output
 
 ```
 
-## Directory
+## Directories:
 
 - `lib/`: Modules used in python scripts: Classification
 - `output/`: Default output directory
@@ -36,7 +35,8 @@ python3 run_classifier.py  --word_embedding_path ../folder_with_embedding_models
 -`model_training/`: here you will find code used to train the models.
 
 `make_tmpfileuniekezinnen.py` can be used to extract sentences from articles INCA database. Duplicate sentences will be removed right away.
-`trainmodel_fromfile_iterator_modelnumber.py` takes a .txt file with sentences as input and trains word2vec models according to different parameter settings.
+`trainmodel_fromfile_iterator_modelnumber.py` takes a .txt file with sentences as input and trains word2vec models with different parameter settings.
+
 
 ## Data
 
@@ -49,3 +49,7 @@ Buscher, Vliegenthart & De Vrees: [Policy Issues Classifier]: https://www.google
 This paper tests a classifer of 18 topics on Dutch news
 
 We thank the authors of these papers for sharing their data. If there are any issues with the way we handle the data/ suggestions, please contact us.
+
+## Word Embedding Vectorizer
+
+This projects uses the an [embedding vectorizer]: https://github.com/ccs-amsterdam/embeddingvectorizer (credits for Wouter van Atteveld)
