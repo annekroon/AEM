@@ -10,8 +10,9 @@ lettersanddotsonly = re.compile(r'[^a-zA-Z\.]')
 
 PATH = "/home/anne/tmpanne/"
 
-outlets = ['ad (print)' , 'ad (www)' , 'anp' ,  'bd (www)' , 'bndestem (www)' , 'destentor (www)' , 'ed (www)' , 'fd (print)' , 'frieschdagblad (www)' , 'gelderlander (www)' , 'metro (print)' , 'metro (www)' ,  'nos' , 'nos (www)' , 'nrc (print)' , 'nrc (www)' , 'nu' , 'parool (www)' , 'pzc (www)' ,'spits (www)' , 'telegraaf (print)' , 'telegraaf (www)'  , 'trouw (print)' , 'trouw (www)' , 'tubantia (www)' , 'volkskrant (print)' , 'volkskrant (www)' , 'zwartewaterkrant (www)' ]
+#outlets = ['ad (print)' , 'ad (www)' , 'anp' ,  'bd (www)' , 'bndestem (www)' , 'destentor (www)' , 'ed (www)' , 'fd (print)' , 'frieschdagblad (www)' , 'gelderlander (www)' , 'metro (print)' , 'metro (www)' ,  'nos' , 'nos (www)' , 'nrc (print)' , 'nrc (www)' , 'nu' , 'parool (www)' , 'pzc (www)' ,'spits (www)' , 'telegraaf (print)' , 'telegraaf (www)'  , 'trouw (print)' , 'trouw (www)' , 'tubantia (www)' , 'volkskrant (print)' , 'volkskrant (www)' , 'zwartewaterkrant (www)' ]
 
+outlets = ['ad (print)' , 'fd (print)' ,  'metro (print)' ,  'nrc (print)' , 'telegraaf (print)' , 'trouw (print)' ,  'volkskrant (print)'  ]
 
 
 def preprocess(s):
@@ -72,7 +73,7 @@ def train_and_save(fromdate,todate,doctype):
             fo.write('\n')
     with open(filename+'_numberofarticles.json', mode = 'w') as fo:
         json.dump({"succes":casus.numberofarticles, "fail":casus.numberoffailedarticles}, fo)
-    
+
     print('Created file with sentences: {}'.format(filename))
 
 
@@ -82,4 +83,4 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
     logging.root.setLevel(level=logging.INFO)
 
-    train_and_save(fromdate = "2015-01-01", todate = "2017-12-31", doctype = outlets)
+    train_and_save(fromdate = "2000-01-01", todate = "2017-12-31", doctype = outlets)

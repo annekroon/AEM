@@ -13,7 +13,6 @@ from sklearn.metrics import precision_recall_fscore_support as score
 import json
 import os
 
-
 class word2vec_analyzer():
     '''This class tests the efficacy of Word2Vec models in downstream tasks.'''
 
@@ -36,7 +35,12 @@ class word2vec_analyzer():
             model = {}
             path = os.path.join(self.basepath, fname)
             print("\nLoading gensim model")
-            mod = gensim.models.Word2Vec.load(path)
+
+            if fname.startswith('w2v'):
+                mod = gensim.models.Word2Vec.load(path)
+            else:
+                mod = gensim.models.KeyedVectors.load_word2vec_format(path)
+
             model['gensimmodel'] = dict(zip(mod.wv.index2word, mod.wv.vectors))
             model['filename'] = fname
             self.nmodel +=1

@@ -8,7 +8,7 @@ This repo contains the following elements:
 - Training of Word Embeddings Models:
     - We use Word2Vec to train sets of models on smaller and larger samples with different parameter settings
 - Evaluation of these models:
-	- Intrinsic evaluation (i.e., syntatic and semantic accuracy of the models)
+	- Intrinsic evaluation (i.e., syntatic and semantic accuracy of the models), using the following task: [evaluating dutch embeddings]: https://github.com/clips/dutchembeddings
 	- Extrinsic evaluation (i.e., performance of the models in downstream tasks)
 
 In doing so, we compare the here-trained models with pre-trained word embedding models on Dutch corpora.
@@ -33,8 +33,12 @@ python3 run_classifier.py  --word_embedding_path ../folder_with_embedding_models
 - `lib/`: Modules used in python scripts: Classification
 - `output/`: Default output directory
 - `helpers/`: small scripts to get info on training samples
+-`model_training/`: here you will find code used to train the models.
 
-## Directory
+`make_tmpfileuniekezinnen.py` can be used to extract sentences from articles INCA database. Duplicate sentences will be removed right away.
+`trainmodel_fromfile_iterator_modelnumber.py` takes a .txt file with sentences as input and trains word2vec models according to different parameter settings.
+
+## Data
 
 The current study tests the quality of classifiers w/wo embedding vectorizers on the following data:
 
