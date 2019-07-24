@@ -1,4 +1,3 @@
-%matplotlib notebook
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -48,7 +47,7 @@ class word2vec_analyzer():
 
     def __init__(self):
         self.nmodel = 0
-        self.vectorizer = 'Tfidf'
+        self.vectorizer = 'Count'
         self.param_grid = {'clf__penalty': ('l2', 'elasticnet') }
         
        # logger.info("Created analyzer with {} combinations for crime and {} combinations for low life".format(
@@ -87,7 +86,8 @@ class word2vec_analyzer():
                 ('clf', SGDClassifier(loss='hinge', tol=1e-4, alpha=1e-6, max_iter=1000, random_state=42)),
             ])
             
-        param_grid = self.param_grid 
+        param_grid = self.param_grid
+
         search = GridSearchCV(pipeline, param_grid, iid=False, cv=5)
         logger.info("Start GridSearch ...")
 
@@ -103,8 +103,8 @@ class word2vec_analyzer():
   
     def apply_bestparameters_w2v(self, X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test):
         
-        logger.info("retrieved the best parameter settings: {}...  ".format(bp))
-        logger.info("\n\n\nthese are the results of the baseline model with hyperparameter optimalization: {}".format(results_baseline))
+ #       logger.info("retrieved the best parameter settings: {}...  ".format(bp))
+#        logger.info("\n\n\nthese are the results of the baseline model with hyperparameter optimalization: {}".format(results_baseline))
         
         results = []
         
@@ -128,12 +128,13 @@ class word2vec_analyzer():
 
         test_pred = clf.predict(X_test)
         logger.info("predicted baseline model.")
-            
-        test_pred = search.predict(X_test)
+
         accuracy = accuracy_score(y_test, test_pred)
         precision = precision_score(y_test, test_pred, average = 'macro')
         recall = recall_score(y_test, test_pred, average = 'macro')
         f1score = f1_score(y_test, test_pred, average = 'macro')
+
+        print("accurcay {}, precision {} recall {} and f1score {} baseline".format(accuracy, precision, recall, f1score))
         
         results.append({'accuracy': accuracy, 
             'precision': precision, 

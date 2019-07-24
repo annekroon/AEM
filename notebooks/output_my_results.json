@@ -1,1 +1,13 @@
-[
+[{"recall": [0.04805163758068372], "accuracy": 0.04805163758068372, "train_size": 10, "precision": [0.05135256585837019], "f1score": [0.034264594629886715], "classifier": "svm", "model": "baseline"},
+{"recall": [0.08523044971643103], "accuracy": 0.08523044971643103, "train_size": 40, "precision": [0.16447083025203463], "f1score": [0.08253499164804798], "classifier": "svm", "model": "baseline"},
+{"recall": [0.20832325187515122], "accuracy": 0.20832325187515122, "train_size": 160, "precision": [0.30441495987352263], "f1score": [0.20783688245152315], "classifier": "svm", "model": "baseline"},
+{"recall": [0.3338367312694018], "accuracy": 0.3338367312694018, "train_size": 640, "precision": [0.43368204538293453], "f1score": [0.3437514689873606], "classifier": "svm", "model": "baseline"},
+{"recall": [0.37113937191798596], "accuracy": 0.37113937191798596, "train_size": 1000, "precision": [0.4675179367646775], "f1score": [0.3997467529498054], "classifier": "svm", "model": "baseline"},
+{"recall": [0.46267024555124764], "accuracy": 0.46267024555124764, "train_size": 2500, "precision": [0.4740838783393558], "f1score": [0.4559567578569644], "classifier": "svm", "model": "baseline"},
+{"recall": [0.1107657980715595], "accuracy": 0.10933142083034504, "train_size": 10, "precision": [0.021654801187619043], "f1score": [0.02785423527616281], "classifier": "ET", "model": "baseline"},
+{"recall": [0.15352663950794793], "accuracy": 0.15432542535346275, "train_size": 40, "precision": [0.23547672059279554], "f1score": [0.11790634051805027], "classifier": "ET", "model": "baseline"},
+{"recall": [0.2258246632792967], "accuracy": 0.22614726994112427, "train_size": 160, "precision": [0.28508288893577693], "f1score": [0.16041284274855702], "classifier": "ET", "model": "baseline"},
+{"recall": [0.3524624549039349], "accuracy": 0.3525463545599463, "train_size": 640, "precision": [0.3999758519017023], "f1score": [0.30038015261221196], "classifier": "ET", "model": "baseline"},
+{"recall": [0.3944977939268103], "accuracy": 0.39700666147590624, "train_size": 1000, "precision": [0.4108860882348373], "f1score": [0.34498660742144527], "classifier": "ET", "model": "baseline"},
+{"recall": [0.44328462073764785], "accuracy": 0.43871160155085, "train_size": 2500, "precision": [0.44974930724284], "f1score": [0.3858148383314058], "classifier": "ET", "model": "baseline"},
+[]]
