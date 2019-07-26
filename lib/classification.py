@@ -19,7 +19,10 @@ class word2vec_analyzer():
     def __init__(self, path_to_data, path_to_embeddings, vectorizer, sample_size):
         self.nmodel = 0
         self.vectorizer = vectorizer
-        self.train_sizes = [10, 40, 160, 640, 1000, 2500]
+        if path_to_data.data_path.split('/')[-1] == 'dataset_vermeer.pkl':
+            self.train_sizes = [10, 40, 160, 640, 1000, 2500, 3486]
+        elif path_to_data.data_path.split('/')[-1] == 'dataset_burscher.pkl':
+            self.train_sizes = [10, 40, 160, 640, 1000, 2500, 5000, 7500, 10000, 12559]
         df = pd.read_pickle(path_to_data)
         self.data = df['text']
         self.labels = df['topic']
