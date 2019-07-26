@@ -1,0 +1,1 @@
+python3 run_classifier.py  --word_embedding_path /home/anne/tmpanne/fullsample/ --word_embedding_sample_size large  --type_vectorizer Tfidf --data_path /home/anne/tmpanne/AEM_data/dataset_vermeer.pkl --output output/output
