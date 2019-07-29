@@ -1,1 +1,4 @@
 python3 run_classifier.py  --word_embedding_path /home/anne/tmpanne/fullsample/ --word_embedding_sample_size large  --type_vectorizer Tfidf --data_path /home/anne/tmpanne/AEM_data/dataset_vermeer.pkl --output output/output
+python3 run_classifier.py  --word_embedding_path /home/anne/tmpanne/fullsample/ --word_embedding_sample_size large  --type_vectorizer Tfidf --data_path /home/anne/tmpanne/AEM_data/dataset_burscher.pkl --output output/output
+
+python3 run_intrinsic_evaluation.py --word_embedding_path /home/anne/tmpanne/fullsample/ --word_embedding_sample_size large  --output output/output --path_to_evaluation_data resources/question-words.text
