@@ -73,7 +73,7 @@ def per_type(x):
     return var
 
 
-df = df.read_pickle("output_training_size_large_AEM_data_{}.pkl".format(args.dataset))
+df = pd.read_pickle("output_training_size_large_AEM_data_{}.pkl".format(args.dataset))
 
 df['model'] = df['model'].map(rename_models)
 df_n = pd.melt(df, id_vars = ['accuracy', 'train_size', 'model'], var_name='model classifier')
