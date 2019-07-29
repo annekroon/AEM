@@ -39,11 +39,10 @@ class word2vec_transformer():
 
             logging.INFO("reopen it with gensim.models.KeyedVectors.load_word2vec_format ('{}')".format(flnm)
 
-if __name__ == "__main__":
+    if __name__ == "__main__":
+        logger = logging.getLogger()
+        logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+        logging.root.setLevel(level=logging.INFO)
 
-    logger = logging.getLogger()
-    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-    logging.root.setLevel(level=logging.INFO)
-
-    transformer = word2vec_transformer(path_to_embeddings = PATH)
-    transformer.save_model()
+        transformer = word2vec_transformer(path_to_embeddings = PATH)
+        transformer.save_model()
