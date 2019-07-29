@@ -116,7 +116,7 @@ a = a.groupby(['new_label', 'train_size']).agg(np.mean)
 a = a.reset_index(level=[0,1])
 
 fig = create_pointplot(a, 'train_size', 'accuracy', hue='new_label', size=10, aspect=1.5,
-                 title="Accuracy across different classifiers")
+                 title="accuracy across different classifiers")
 
 fig.savefig("{}{}_figure_classification.png".format(args.output, args.dataset))
 print("\n\n\nSave fig\n\n\n")
