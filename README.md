@@ -35,8 +35,22 @@ This script returns accuracy scores for instrinc evaluation tasks.
 Example usage:
 
 ```
-python3 run_intrinsic_evaluation.py  --word_embedding_path ../folder_with_embedding_models/ --word_embedding_sample_size large  --output output/output --path_to_evaluation_data ../model_evaluation/analogies/question-words.txt
+python3 run_intrinsic_evaluation.py  --word_embedding_path ../folder_with_embedding_models/
+--word_embedding_sample_size large  --output output/output
+--path_to_evaluation_data ../model_evaluation/analogies/question-words.txt
 ```
+
+
+#### get_results_classifier.py
+
+Transforms pkl output of classification task to tables and figures, and saves the output to `tables_and_figures/`
+
+Example usage:
+
+```
+python3 get_results_classifier.py --output tables_figures/ --dataset vliegenthart
+```
+
 ## Directories:
 
 - `lib/`: Modules used in python scripts: Classification
