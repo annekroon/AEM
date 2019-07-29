@@ -28,7 +28,7 @@ class word2vec_transformer():
                 self.nmodel +=1
                 print("loaded gensim model nr {}, named: {}".format(self.nmodel, model['filename']))
 
-            yield model
+                yield model
 
     def save_model(self):
         for model in self.get_w2v_model():
