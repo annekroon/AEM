@@ -1,8 +1,20 @@
 from lib import classification
-import logging
+import numpy as np
 import argparse
 import json
 import pandas as pd
+import seaborn as sns
+
+
+parser = argparse.ArgumentParser(description='Compute Table and Figure summarizing results of pretrained word embedding models')
+parser.add_argument('--dataset', type=str, required=False, default='vermeer', help='Path of dataset with annotated data to be classified')
+parser.add_argument('--output', type=str, required=False, default='tables_figures/', help='Path of output file (CSV formatted classification scores)')
+args = parser.parse_args()
+
+print('Arguments:')
+print('dataset:', args.dataset)
+print('output.path:', args.output)
+print()
 
 def rename_models(x):
     variable_name = x
@@ -72,8 +84,7 @@ def per_type(x):
         var = 'w2v_svm_mean'
     return var
 
-
-df = pd.read_pickle("output_training_size_large_AEM_data_{}.pkl".format(args.dataset))
+df = pd.read_pickle("output/output_training_size_large_AEM_data_{}.pkl".format(args.dataset))
 
 df['model'] = df['model'].map(rename_models)
 df_n = pd.melt(df, id_vars = ['accuracy', 'train_size', 'model'], var_name='model classifier')
@@ -92,7 +103,7 @@ tab = df_n.style.\
 
 # write results to Table
 
-f=open("{}_{}_table_results.html".format(args.output, args.dataset),"w")
+f=open("{}{}_table_results_classification.html".format(args.output, args.dataset),"w")
 f.write(tab.render()) # df is the styled dataframe
 f.close()
 print("\n\n\nSave results\n\n\n")
@@ -107,23 +118,5 @@ a = a.reset_index(level=[0,1])
 fig = create_pointplot(a, 'train_size', 'accuracy', hue='new_label', size=10, aspect=1.5,
                  title="Accuracy across different classifiers")
 
-fig.savefig("{}_{}_figure.png".format(args.output, args.dataset))
+fig.savefig("{}{}_figure_classification.png".format(args.output, args.dataset))
 print("\n\n\nSave fig\n\n\n")
-
-if __name__ == '__main__':
-
-	logger = logging.getLogger()
-	logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-	logging.root.setLevel(level=logging.INFO)
-
-	parser = argparse.ArgumentParser(description='Compute Table and Figure summarizing results of pretrained word embedding models')
-	parser.add_argument('--dataset', type=str, required=False, default='vermeer', help='Path of dataset with annotated data to be classified')
-	parser.add_argument('--output', type=str, required=False, default='tables_figures/', help='Path of output file (CSV formatted classification scores)')
-	args = parser.parse_args()
-
-	print('Arguments:')
-	print('dataset:', args.dataset)
-	print('output.path:', args.output)
-	print()
-
-	main(args)
