@@ -8,7 +8,7 @@ PATH = "/home/anne/tmpanne/AEM_small_sample/"
 FILENAME = "uniekezinnen_2000-01-01_2017-12-31"
 # n sentences uniekezinnen_2000-01-01_2017-12-31: 4289076/4289076
 
-NR_MODEL = 0
+NR_MODEL = 2
 
 def get_parameters(model_number):
     nr = int(model_number)

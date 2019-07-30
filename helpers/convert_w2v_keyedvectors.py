@@ -1,7 +1,7 @@
 
 import gensim
 from gensim.models import KeyedVectors
-import logging
+import os
 
 PATH = '/home/anne/tmpanne/fullsample/'
 
@@ -33,16 +33,15 @@ class word2vec_transformer():
     def save_model(self):
         for model in self.get_w2v_model():
             flnm = "{}{}.txt".format(self.basepath, model['filename'])
-            logging.INFO("the new filename is: {}".format(flnm))
+            print("the new filename is: {}".format(flnm))
             model['gensimmodel'].wv.save_word2vec_format("{}".format(flnm))
-            logging.INFO('Saved model')
+            print('Saved model')
+            print("reopen it with gensim.models.KeyedVectors.load_word2vec_format ('{}')".format(flnm))
 
-            logging.INFO("reopen it with gensim.models.KeyedVectors.load_word2vec_format ('{}')".format(flnm)
 
-    if __name__ == "__main__":
-        logger = logging.getLogger()
-        logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-        logging.root.setLevel(level=logging.INFO)
+def main():
+    transformer = word2vec_transformer(path_to_embeddings = PATH)
+    transformer.save_model()
 
-        transformer = word2vec_transformer(path_to_embeddings = PATH)
-        transformer.save_model()
+if __name__ == '__main__':
+    main()
