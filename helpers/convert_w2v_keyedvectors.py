@@ -39,9 +39,17 @@ class word2vec_transformer():
             print("reopen it with gensim.models.KeyedVectors.load_word2vec_format ('{}')".format(flnm))
 
 
+<<<<<<< HEAD
 def main():
     transformer = word2vec_transformer(path_to_embeddings = PATH)
     transformer.save_model()
+=======
+    if __name__ == "__main__":
+
+        logger = logging.getLogger()
+        logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+        logging.root.setLevel(level=logging.INFO)
+>>>>>>> 971c438518f495f97083ac91105bfb066cea85ad
 
 if __name__ == '__main__':
     main()
