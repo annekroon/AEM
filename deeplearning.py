@@ -1,5 +1,4 @@
 import tensorflow as tf
-import numpy as np
 from tqdm import tqdm
 import pandas as pd
 import pickle
@@ -14,6 +13,8 @@ from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import Tokenizer
 import string
+
+print("OKAY LETS STAAAART!!!")
 
 def encodeY(Y):
     '''create one-hot (dummies) for output, see also https://machinelearningmastery.com/multi-class-classification-tutorial-keras-deep-learning-library/
@@ -87,6 +88,9 @@ def get_weight_matrix(embedding, vocab):
     print('Weight matrix created. For {} out of {} words, we did not have any embedding.'.format(words_not_found, total_words))
     return DEBUG_lijstmetwoorden, weight_matrix
 
+
+missingwords, embedding_vectors = get_weight_matrix(embeddings_index, tokenizer.word_index)
+
 embedding_layer = Embedding(len(tokenizer.word_index)+1, 300, weights=[embedding_vectors], input_length=max_length, trainable=False)
 print("created embedding layer")
 
@@ -107,11 +111,10 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 print(model.summary())
 
 
-
-VALIDATION_SIZE=500
+VALIDATION_SIZE=1000
 
 model.fit(Xtrain[:-VALIDATION_SIZE], y_train[:-VALIDATION_SIZE],
-          epochs=1, verbose=True,
+          epochs=30, verbose=True,
           validation_data=(Xtrain[-VALIDATION_SIZE:], y_train[-VALIDATION_SIZE:]))
 
 loss, acc = model.evaluate(Xtest, y_test, verbose=True)
